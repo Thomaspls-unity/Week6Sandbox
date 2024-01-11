@@ -8,7 +8,7 @@ public class Target : MonoBehaviour
     private float maxSpeed = 16;
     private float maxTorque = 10;
     private float xRange = 4;
-    private float ySpawnPos = -6;
+    private float ySpawnPos = -4;
 
     public int pointValue;
 
@@ -44,14 +44,22 @@ public class Target : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (gameManager.isGameActive)
+        {
         gameManager.UpdateScore(pointValue);
         Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
         Destroy(gameObject);
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Destroy(gameObject);
+        if (!gameObject.CompareTag("Bad"))
+        {
+            gameManager.GameOver();
+        }
     }
     // Update is called once per frame
     void Update()

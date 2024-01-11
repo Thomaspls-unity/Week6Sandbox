@@ -10,15 +10,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreTxtUpdate;
     [SerializeField] private TMP_Text highScoreTxt;
     [SerializeField] private TMP_Text highScoreTxtUpdate;
-    //[SerializeField] private Button settingsButton;
-    //[SerializeField] private GameObject settingsUI;
+
+    [SerializeField] private GameObject gameOverUI;
+
+    [SerializeField] private Button retryBtn;
+    [SerializeField] private Button menuBtn;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private GameObject settingsUI;
     // Start is called before the first frame update
     void Start()
     {
         GameManagerSBox.Instance.GetPlayer().OnScoreUpdated += UpdateScore;
         GameManagerSBox.Instance.GetPlayer().OnHighScoreUpdated += UpdateHighScore;
-
-        //settingsButton.onClick.AddListener(EnableUI);
+        GameManagerSBox.Instance.OnGameOver.AddListener(ShowGameOverUI);
+        retryBtn.onClick.AddListener(ReloadGame);
     }
 
     // Update is called once per frame
@@ -53,8 +58,18 @@ public class UIManager : MonoBehaviour
         highScoreTxtUpdate.SetText("");
     }
 
-    //private void EnableUI()
-    //{
-    //    settingsUI.SetActive(true);
-    //}
+    private void ShowGameOverUI()
+    {
+        gameOverUI.SetActive(true);
+    }
+
+    private void ReloadGame()
+    {
+        GameManagerSBox.Instance.ChangeScene("SandboxGame");
+    }
+
+    private void EnableUI()
+    {
+        settingsUI.SetActive(true);
+    }
 }
