@@ -6,23 +6,27 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("Score System")]
     [SerializeField] private TMP_Text scoreTxt;
     [SerializeField] private TMP_Text scoreTxtUpdate;
     [SerializeField] private TMP_Text highScoreTxt;
     [SerializeField] private TMP_Text highScoreTxtUpdate;
 
+    [Header("UI System")]
     [SerializeField] private GameObject gameOverUI;
+    [SerializeField] private GameObject pauseUI;
+    [SerializeField] private GameObject pauseButton;
 
     [SerializeField] private Button retryBtn;
     [SerializeField] private Button menuBtn;
-    [SerializeField] private Button settingsButton;
-    [SerializeField] private GameObject settingsUI;
     // Start is called before the first frame update
     void Start()
     {
         GameManagerSBox.Instance.GetPlayer().OnScoreUpdated += UpdateScore;
         GameManagerSBox.Instance.GetPlayer().OnHighScoreUpdated += UpdateHighScore;
         GameManagerSBox.Instance.OnGameOver.AddListener(ShowGameOverUI);
+        GameManagerSBox.Instance.OnPause.AddListener(ShowPauseUI);
+        GameManagerSBox.Instance.OnResume.AddListener(HidePauseUI);
         retryBtn.onClick.AddListener(ReloadGame);
     }
 
@@ -63,13 +67,20 @@ public class UIManager : MonoBehaviour
         gameOverUI.SetActive(true);
     }
 
+    public void ShowPauseUI()
+    {
+        pauseUI.SetActive(true);
+        pauseButton.SetActive(false);
+    }
+
+    public void HidePauseUI()
+    {
+        pauseUI.SetActive(false);
+        pauseButton.SetActive(true);
+    }
+
     private void ReloadGame()
     {
         GameManagerSBox.Instance.ChangeScene("SandboxGame");
-    }
-
-    private void EnableUI()
-    {
-        settingsUI.SetActive(true);
     }
 }

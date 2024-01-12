@@ -10,6 +10,11 @@ public class GameManagerSBox : MonoBehaviour
     private Player player;
 
     public UnityEvent OnGameOver;
+    public UnityEvent OnPause;
+    public UnityEvent OnResume;
+
+    private bool isPaused;
+    
     [SerializeField] private bool isGameRunning = false;
 
     public static GameManagerSBox Instance;
@@ -30,6 +35,29 @@ public class GameManagerSBox : MonoBehaviour
             Instance = this;
         }
     }
+
+    public void PauseScreen()
+    {
+        if (!isPaused)
+        {
+            isPaused = true;
+            Debug.Log("Game Paused");
+            OnPause?.Invoke();
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            isPaused = false;
+            Debug.Log("Game Resumed");
+            OnResume?.Invoke();
+            Time.timeScale = 1f;
+        }
+    }
+
+    public bool IsPaused()
+    {
+        return isPaused;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +71,11 @@ public class GameManagerSBox : MonoBehaviour
         if (!isGameRunning)
         {
             OnGameOver.Invoke();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) 
+        { 
+            PauseScreen();
         }
     }
 
